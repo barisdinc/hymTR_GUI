@@ -1,12 +1,10 @@
 // Need G4P library
 import g4p_controls.*;
-// You can remove the PeasyCam import if you are not using
-// the GViewPeasyCam control or the PeasyCam library.
-//import peasy.*;
 import processing.serial.*;
+Serial myPort;
 
 public void setup(){
-  size(480, 500, JAVA2D);
+  size(460, 500, JAVA2D);
   splashGUI();
   createMainGUI();
   
@@ -22,7 +20,6 @@ public void timer1_Action1(GTimer source) { //_CODE_:timer1:910330:
   println("timer1 - GTimer >> an event occured @ " + millis());
   splashScreen.forceClose();
 } //_CODE_:timer1:910330:
-
 
 synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:seriportWindow:303233:
   appc.background(230);
@@ -84,6 +81,11 @@ public void textfieldCagriAdi_change1(GTextField source, GEvent event) { //_CODE
   println("textfieldCagriAdi - GTextField >> GEvent." + event + " @ " + millis());
 } //_CODE_:textfieldCagriAdi:558481:
 
+public void dropListSeriPort_click1(GDropList source, GEvent event) {
+  println("dropListSeriPort - GDropList >> GEvent." + event + " @ " + millis());
+  myPort = new Serial(this, source.getSelectedText(), 115200);
+}
+
 public void dropListSSID_click1(GDropList source, GEvent event) { //_CODE_:dropListSSID:560365:
   println("dropListSSID - GDropList >> GEvent." + event + " @ " + millis());
 } //_CODE_:dropListSSID:560365:
@@ -110,9 +112,8 @@ public void sliderTXDelay_change1(GSlider source, GEvent event) { //_CODE_:slide
 
 public void buttonReceive_click1(GButton source, GEvent event) { //_CODE_:buttonReceive:300015:
   println("buttonReceive - GButton >> GEvent." + event + " @ " + millis());
+  myPort.write('!');
 } //_CODE_:buttonReceive:300015:
-
-
 
 public void splashGUI(){
   G4P.messagesEnabled(false);
@@ -122,200 +123,144 @@ public void splashGUI(){
   splashScreen.noLoop();
   splashScreen.setActionOnClose(G4P.CLOSE_WINDOW);
   splashScreen.addDrawHandler(this, "win_draw1");
-  imgButtonTamsatLogo = new GImageButton(splashScreen, 15, 15, 70, 70, new String[] { "TAMSATLOGOBUYUK.jpg", "TAMSATLOGOBUYUK.jpg", "TAMSATLOGOBUYUK.jpg" } );
+  imgButtonTamsatLogo = new GImageButton(splashScreen, 15, 15, 70, 70, new String[] { "TAMSATLOGOBUYUK.png", "TAMSATLOGOBUYUK.png", "TAMSATLOGOBUYUK.png" } );
   imgButtonTamsatLogo.addEventHandler(this, "imgButton1_click1");
-  imgButtonTamsatInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "tamsatbuyuklogoen.jpg", "tamsatbuyuklogoen.jpg", "tamsatbuyuklogoen.jpg" } );
+  imgButtonTamsatInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png" } );
   imgButtonTamsatInfo.addEventHandler(this, "imgButton2_click1");
-  labelProgramAdi = new GLabel(splashScreen, 80, 101, 270, 30);
+  labelProgramAdi = labelFn(splashScreen, "hymTR APRS Tracker", 80, 101, 270, 30);
   labelProgramAdi.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  labelProgramAdi.setText("hymTR APRS Tracker");
-  labelProgramAdi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelProgramAdi.setOpaque(true);
-  baris = new GLabel(splashScreen, 50, 170, 80, 20);
-  baris.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  baris.setText("Baris DINC");
-  baris.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  baris.setOpaque(false);
-  burcu = new GLabel(splashScreen, 170, 170, 80, 20);
-  burcu.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  burcu.setText("Burcu AYBAK");
-  burcu.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  burcu.setOpaque(false);
-  hazirlayanlar = new GLabel(splashScreen, 150, 140, 120, 20);
-  hazirlayanlar.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  hazirlayanlar.setText("HAZIRLAYANLAR");
-  hazirlayanlar.setLocalColorScheme(GCScheme.RED_SCHEME);
-  hazirlayanlar.setOpaque(false);
-  emre = new GLabel(splashScreen, 290, 170, 80, 20);
-  emre.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  emre.setText("Emre KELES");
-  emre.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  emre.setOpaque(false);
+  hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 150, 140, 120, 20);
+  baris = labelFn(splashScreen,"Baris DINC", 50, 170, 80, 20);
+  burcu = labelFn(splashScreen, "Burcu AYBAK", 170, 170, 80, 20);
+  emre = labelFn(splashScreen, "Emre KELES", 290, 170, 80, 20);
+
   splashScreen.loop();
 }
-
 
 public void createMainGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.GOLD_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("hymTR Ayar Programi");
-
-  labelSeriPort = new GLabel(this, 20, 10, 80, 20);
-  labelSeriPort.setText("Seri Port");
-  labelSeriPort.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelSeriPort.setOpaque(false);
-
-  dropListSeriPort = new GDropList(this, 99, 10, 290, 80, 3, 10);
-//  dropListSSID.setItems(loadStrings("list_560365"), 3);
-  String[] seriportListesi = Serial.list();
-  dropListSeriPort.setItems(seriportListesi, 3);
-  dropListSeriPort.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  dropListSeriPort.addEventHandler(this, "dropListSeriPort_click1");  
-
-  labelCagriAdi = new GLabel(this, 20, 40, 80, 20);
-  labelCagriAdi.setText("Cagriadi");
-  labelCagriAdi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelCagriAdi.setOpaque(false);
-
-  textfieldCagriAdi = new GTextField(this, 99, 40, 150, 20, G4P.SCROLLBARS_NONE);
-  textfieldCagriAdi.setText("TA7W");
-  textfieldCagriAdi.setPromptText("Buraya Cagri Adinizi Giriniz (SSID haric)");
-  textfieldCagriAdi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  textfieldCagriAdi.setOpaque(true);
-  textfieldCagriAdi.addEventHandler(this, "textfieldCagriAdi_change1");
-
-  labelSSID = new GLabel(this, 253, 40, 36, 20);
-  labelSSID.setText("SSID");
-  labelSSID.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelSSID.setOpaque(false);
-  dropListSSID = new GDropList(this, 290, 40, 160, 80, 3, 10);
-//  dropListSSID.setItems(loadStrings("list_560365"), 3);
+  String[] seriPortListesi = Serial.list();
   String[] ssidListesi = {"-0 Sabit Merkez","-7 El Telsizi ile hareketli","-9 Mobil arac"};
-  dropListSSID.setItems(ssidListesi, 3);
-  dropListSSID.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  dropListSSID.addEventHandler(this, "dropListSSID_click1");  
-
-  labelSembol = new GLabel(this, 20, 70, 80, 20);
-  labelSembol.setText("Sembol");
-  labelSembol.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelSembol.setOpaque(false);
-  dropListSembol = new GDropList(this, 100, 70, 150, 80, 3, 10);
-//  dropListSembol.setItems(loadStrings("list_606061"), 3);
   String[] semboller = {"Ev","El Telsizi","Motorsiklet","Araba"};
-  dropListSembol.setItems(semboller, 3);
-  dropListSembol.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  dropListSembol.addEventHandler(this, "dropListSembol_click1");
-
-  labelGPSPortHizi = new GLabel(this, 20, 100, 80, 20);
-  labelGPSPortHizi.setTextAlign(GAlign.RIGHT, GAlign.MIDDLE);
-  labelGPSPortHizi.setText("GPS Port Hizi");
-  labelGPSPortHizi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelGPSPortHizi.setOpaque(false);
-  dropListGPSHizi = new GDropList(this, 100, 100, 150, 80, 3, 10);
-//  dropListGPSHizi.setItems(loadStrings("list_549444"), 1);
   String[] gpsHizlari = {"4800","9600","57600","115200"};
-  dropListGPSHizi.setItems(gpsHizlari, 1);
-  dropListGPSHizi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  dropListGPSHizi.addEventHandler(this, "dropListGPSHizi_click1");
-
-  labelMesaj = new GLabel(this, 20, 130, 80, 20);
-  labelMesaj.setText("Mesaj");
-  labelMesaj.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelMesaj.setOpaque(false);
-  textfieldMesaj = new GTextField(this, 100, 130, 350, 20, G4P.SCROLLBARS_NONE);
-  textfieldMesaj.setText("QRV 145.500 Ceptel: 0 5XX XXX XX XX");
-  textfieldMesaj.setPromptText("Buraya havaya yayimlanacak mesajinizi yaziniz");
-  textfieldMesaj.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  textfieldMesaj.setOpaque(true);
-  textfieldMesaj.addEventHandler(this, "textfieldMesaj_change1");
-
-  labelGonder = new GLabel(this, 20, 160, 80, 20);
-  labelGonder.setText("Gonder");
-  labelGonder.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelGonder.setOpaque(false);
-  checkboxLokasyon = new GCheckbox(this, 100, 160, 150, 20);
-  checkboxLokasyon.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
-  checkboxLokasyon.setText("Lokasyon");
-  checkboxLokasyon.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  checkboxLokasyon.setOpaque(true);
-  checkboxLokasyon.addEventHandler(this, "checkboxLokasyon_clicked1");
-  checkboxLokasyon.setSelected(true);
-  checkboxYukseklik = new GCheckbox(this, 100, 180, 150, 20);
-  checkboxYukseklik.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
-  checkboxYukseklik.setText("Yukseklik");
-  checkboxYukseklik.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  checkboxYukseklik.setOpaque(true);
-  checkboxYukseklik.addEventHandler(this, "checkboxYukseklik_clicked1");
-  checkboxBatarya = new GCheckbox(this, 100, 200, 150, 20);
-  checkboxBatarya.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
-  checkboxBatarya.setText("Batarya Durumu");
-  checkboxBatarya.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  checkboxBatarya.setOpaque(true);
-  checkboxBatarya.addEventHandler(this, "checkboxBatarya_clicked1");
-
-  labelAkilliBeacon = new GLabel(this, 10, 220, 180, 20);
-  labelAkilliBeacon.setText("Akilli Beacon (Dakika)");
-  labelAkilliBeacon.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelAkilliBeacon.setOpaque(false);
-  sliderZamanlama = new GSlider(this, 10, 240, 440, 47, 10.0);
-  sliderZamanlama.setShowValue(true);
-  sliderZamanlama.setShowLimits(true);
-  sliderZamanlama.setLimits(1, 1, 60);
-  sliderZamanlama.setNbrTicks(10);
-  sliderZamanlama.setStickToTicks(true);
-  sliderZamanlama.setShowTicks(true);
-  sliderZamanlama.setNumberFormat(G4P.INTEGER, 0);
-  sliderZamanlama.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  sliderZamanlama.setOpaque(true);
-  sliderZamanlama.addEventHandler(this, "sliderZamanlama_change1");
-
-  labelPreambleSuresi = new GLabel(this, 10, 300, 180, 20);
-  labelPreambleSuresi.setText("Preamble Suresi (milisaniye)");
-  labelPreambleSuresi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelPreambleSuresi.setOpaque(false);
-  sliderPreamble = new GSlider(this, 10, 320, 440, 50, 10.0);
-  sliderPreamble.setShowValue(true);
-  sliderPreamble.setShowLimits(true);
-  sliderPreamble.setLimits(350, 100, 1000);
-  sliderPreamble.setNbrTicks(20);
-  sliderPreamble.setStickToTicks(true);
-  sliderPreamble.setShowTicks(true);
-  sliderPreamble.setNumberFormat(G4P.INTEGER, 0);
-  sliderPreamble.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  sliderPreamble.setOpaque(true);
-  sliderPreamble.addEventHandler(this, "sliderPreamble_change1");
-
-
-  labelKuyrukSuresi = new GLabel(this, 10, 380, 190, 20);
-  labelKuyrukSuresi.setText("Kuyruk Suresi (milisaniye)");
-  labelKuyrukSuresi.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  labelKuyrukSuresi.setOpaque(false);
-  sliderTXDelay = new GSlider(this, 10, 400, 440, 50, 10.0);
-  sliderTXDelay.setShowValue(true);
-  sliderTXDelay.setShowLimits(true);
-  sliderTXDelay.setLimits(100, 50, 500);
-  sliderTXDelay.setNbrTicks(9);
-  sliderTXDelay.setStickToTicks(true);
-  sliderTXDelay.setShowTicks(true);
-  sliderTXDelay.setNumberFormat(G4P.INTEGER, 0);
-  sliderTXDelay.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  sliderTXDelay.setOpaque(true);
-  sliderTXDelay.addEventHandler(this, "sliderTXDelay_change1");
-
-  buttonReceive = new GButton(this, 10, 460, 210, 30);
-  buttonReceive.setText("Bilgileri Cihazdan Al");
-  buttonReceive.setLocalColorScheme(GCScheme.BLUE_SCHEME);
-  buttonReceive.addEventHandler(this, "buttonReceive_click1");
-
-  buttonSend = new GButton(this, 229, 460, 220, 30);
-  buttonSend.setText("Bilgileri Cihaza Yukle");
-  buttonSend.setLocalColorScheme(GCScheme.GREEN_SCHEME);
-  buttonSend.addEventHandler(this, "buttonSend_click1");
-
-
+  
+  labelSeriPort = labelFn(this, "Seri Port", 20, 10, 80, 20);
+  dropListSeriPort = dropListFn(seriPortListesi, "dropListSeriPort_click1", 99, 10, 351, 80, 3, 10);
+  labelCagriAdi = labelFn(this, "Cagriadi", 20, 40, 80, 20);
+  textfieldCagriAdi = textFieldFn("TA7W", "textfieldCagriAdi_change1", 99, 40, 150, 20, G4P.SCROLLBARS_NONE);
+  labelSSID = labelFn(this, "SSID", 253, 40, 36, 20);
+  dropListSSID = dropListFn(ssidListesi, "dropListSSID_click1", 290, 40, 160, 80, 3, 10);
+  labelSembol = labelFn(this, "Sembol", 20, 70, 80, 20);
+  dropListSembol = dropListFn(semboller, "dropListSembol_click1", 100, 70, 150, 80, 3, 10);
+  labelGPS = labelFn(this, "GPS", 20, 100, 80, 20);
+  radioButtonGPSVar = radioButtonFn("Var", "radioButtonGPSVar_clicked1", false, 100, 100, 50, 20);
+  radioButtonGPSYok = radioButtonFn("Yok", "radioButtonGPSYok_clicked1", false, 160, 100, 50, 20);
+  labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 250, 100, 80, 20);
+  dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 330, 100, 120, 80, 3, 10);
+  labelMesaj = labelFn(this, "Mesaj", 20, 130, 80, 20);
+  textfieldMesaj = textFieldFn("QRV 145.500 Ceptel: 0 5XX XXX XX XX", "textfieldMesaj_change1", 100, 130, 350, 20, G4P.SCROLLBARS_NONE);
+  labelGonder = labelFn(this, "Gonder", 20, 160, 80, 20);
+  checkboxLokasyon = checkboxFn("Lokasyon", "checkboxLokasyon_clicked1", true, 100, 160, 150, 20);
+  checkboxYukseklik = checkboxFn("Yukseklik", "checkboxYukseklik_clicked1", false, 100, 180, 150, 20);
+  checkboxBatarya = checkboxFn("Batarya Durumu", "checkboxBatarya_clicked1", false, 100, 200, 150, 20);
+  labelAkilliBeacon = labelFn(this, "Akilli Beacon (Dakika)", 10, 220, 180, 20);
+  sliderZamanlama = sliderFn(1, 1, 60, 10, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
+  labelPreambleSuresi = labelFn(this, "Preamble Suresi (milisaniye)", 10, 300, 180, 20);
+  sliderPreamble = sliderFn(350, 100, 1000, 20, "sliderPreamble_change1", 10, 320, 440, 50, 10.0);
+  labelKuyrukSuresi = labelFn(this, "Kuyruk Suresi (milisaniye)", 10, 380, 190, 20);
+  sliderTXDelay = sliderFn(100, 50, 500, 9, "sliderTXDelay_change1", 10, 400, 440, 50, 10.0);
+  buttonReceive = buttonFn("Bilgileri Cihazdan Al", "buttonReceive_click1", 10, 460, 210, 30);
+  buttonSend = buttonFn("Bilgileri Cihaza Yukle", "buttonSend_click1", 229, 460, 220, 30);
 }
 
+public GLabel labelFnT(PApplet theApplet, String name, float leftMargin, float topMargin, float itemSizeX, float itemSizeY) {
+  GLabel genLabel;
+  genLabel = new GLabel(theApplet, leftMargin, topMargin, itemSizeX, itemSizeY);
+  genLabel.setText(name);
+  genLabel.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genLabel.setOpaque(false);
+  return genLabel;
+}
+
+public GLabel labelFn(PApplet theApplet, String name, float leftMargin, float topMargin, float itemSizeX, float itemSizeY) {
+  GLabel genLabel;
+  genLabel = new GLabel(theApplet, leftMargin, topMargin, itemSizeX, itemSizeY);
+  genLabel.setText(name);
+  genLabel.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genLabel.setOpaque(false);
+  return genLabel;
+}
+
+public GDropList dropListFn(String[] content, String controlFn, float leftMargin, float topMargin, float itemSizeX, float itemSizeY, int listSize, float buttonWidth) {
+  GDropList genDropList;
+  genDropList = new GDropList(this, leftMargin, topMargin, itemSizeX, itemSizeY, listSize, buttonWidth);
+  genDropList.setItems(content, 3);
+  genDropList.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genDropList.addEventHandler(this, controlFn);
+  return genDropList;
+}
+
+public GTextField textFieldFn(String textVal, String controlFn, float leftMargin, float topMargin, float itemSizeX, float itemSizeY, int sbPolicy) {
+  GTextField genTextField;
+  genTextField = new GTextField(this, leftMargin, topMargin, itemSizeX, itemSizeY, sbPolicy);
+  genTextField.setText(textVal);
+  genTextField.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genTextField.setOpaque(true);
+  genTextField.addEventHandler(this, controlFn);
+  return genTextField;
+}
+
+public GOption radioButtonFn(String definition, String controlFn, Boolean isSelected, float leftMargin, float topMargin, float itemSizeX, float itemSizeY) {
+  GOption genRadioButton;
+  genRadioButton = new GOption(this, leftMargin, topMargin, itemSizeX, itemSizeY);
+  genRadioButton.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  genRadioButton.setText(definition);
+  genRadioButton.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genRadioButton.setOpaque(true);
+  genRadioButton.addEventHandler(this, controlFn);
+  genRadioButton.setSelected(isSelected);
+  return genRadioButton;
+}
+
+public GCheckbox checkboxFn(String definition, String controlFn, Boolean isSelected, float leftMargin, float topMargin, float itemSizeX, float itemSizeY) {
+  GCheckbox genCheckbox;
+  genCheckbox = new GCheckbox(this, leftMargin, topMargin, itemSizeX, itemSizeY);
+  genCheckbox.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  genCheckbox.setText(definition);
+  genCheckbox.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genCheckbox.setOpaque(true);
+  genCheckbox.addEventHandler(this, controlFn);
+  genCheckbox.setSelected(isSelected);
+  return genCheckbox;
+}
+
+public GSlider sliderFn(int limit1, int limit2, int limit3, int ticks, String controlFn, float leftMargin, float topMargin, float itemSizeX, float itemSizeY, float slWidth) {
+  GSlider genSlider;
+  genSlider = new GSlider(this, leftMargin, topMargin, itemSizeX, itemSizeY, slWidth);
+  genSlider.setShowValue(true);
+  genSlider.setShowLimits(true);
+  genSlider.setLimits(limit1, limit2, limit3);
+  genSlider.setNbrTicks(ticks);
+  genSlider.setStickToTicks(true);
+  genSlider.setShowTicks(true);
+  genSlider.setNumberFormat(G4P.INTEGER, 0);
+  genSlider.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genSlider.setOpaque(true);
+  genSlider.addEventHandler(this, controlFn);
+  return genSlider;
+}
+
+public GButton buttonFn(String definition, String controlFn, float leftMargin, float topMargin, float itemSizeX, float itemSizeY){
+  GButton genButton;
+  genButton = new GButton(this, leftMargin, topMargin, itemSizeX, itemSizeY);
+  genButton.setText(definition);
+  genButton.setLocalColorScheme(GCScheme.BLUE_SCHEME);
+  genButton.addEventHandler(this, controlFn);
+  return genButton;
+}
 
 // Variable declarations 
 // splashScreen variables
@@ -329,36 +274,32 @@ GLabel hazirlayanlar;
 GLabel emre; 
 GLabel labelAciklama;
 
-
 // mainScreen variables
 GLabel labelSeriPort; 
 GLabel labelCagriAdi; 
 GLabel labelSSID; 
-GLabel labelSembol; 
+GLabel labelSembol;
+GLabel labelGPS;
 GLabel labelGPSPortHizi; 
 GLabel labelMesaj; 
 GLabel labelGonder; 
 GLabel labelAkilliBeacon; 
 GLabel labelPreambleSuresi; 
-GLabel labelKuyrukSuresi; 
-
+GLabel labelKuyrukSuresi;
+GOption radioButtonGPSVar;
+GOption radioButtonGPSYok;
 GTextField textfieldCagriAdi; 
 GTextField textfieldMesaj; 
-
 GCheckbox checkboxLokasyon; 
 GCheckbox checkboxYukseklik; 
 GCheckbox checkboxBatarya; 
-
 GDropList dropListSeriPort; 
 GDropList dropListSSID; 
 GDropList dropListSembol; 
 GDropList dropListGPSHizi; 
-
 GSlider sliderZamanlama; 
 GSlider sliderPreamble; 
 GSlider sliderTXDelay; 
-
 GButton buttonReceive; 
 GButton buttonSend; 
-
 GTimer timer1;
