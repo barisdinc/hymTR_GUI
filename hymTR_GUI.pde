@@ -14,6 +14,15 @@ public void setup(){
 
 public void draw(){
   background(230,230,230);
+  
+  if ( myPort != null)
+  {
+    while (myPort.available() > 0) {
+    int inByte = myPort.read();
+    print((char)inByte);
+  }
+  }
+  
 }
 
 public void timer1_Action1(GTimer source) { //_CODE_:timer1:910330:
@@ -84,6 +93,8 @@ public void textfieldCagriAdi_change1(GTextField source, GEvent event) { //_CODE
 public void dropListSeriPort_click1(GDropList source, GEvent event) {
   println("dropListSeriPort - GDropList >> GEvent." + event + " @ " + millis());
   myPort = new Serial(this, source.getSelectedText(), 115200);
+  delay(5000);
+  myPort.write('!');
 }
 
 public void dropListSSID_click1(GDropList source, GEvent event) { //_CODE_:dropListSSID:560365:
@@ -112,7 +123,7 @@ public void sliderTXDelay_change1(GSlider source, GEvent event) { //_CODE_:slide
 
 public void buttonReceive_click1(GButton source, GEvent event) { //_CODE_:buttonReceive:300015:
   println("buttonReceive - GButton >> GEvent." + event + " @ " + millis());
-  myPort.write('!');
+  myPort.write('P');
 } //_CODE_:buttonReceive:300015:
 
 public void splashGUI(){
@@ -261,6 +272,12 @@ public GButton buttonFn(String definition, String controlFn, float leftMargin, f
   genButton.addEventHandler(this, controlFn);
   return genButton;
 }
+
+
+
+
+
+
 
 // Variable declarations 
 // splashScreen variables
