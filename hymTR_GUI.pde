@@ -6,6 +6,9 @@ Serial myPort;
 String SeriJSON = "";
 boolean yeniVeri = false;
 boolean veriBasi = false;
+boolean gondermeAktif = false;
+
+String Versiyon = "01012020a";
 
 public class APRS_Ayarlari {
   String[] APRS_CagriIsareti;
@@ -26,10 +29,6 @@ public class APRS_Ayarlari {
 };
 
 
-
-
-
-
 public void setup(){
   size(460, 500, JAVA2D);
   splashGUI();
@@ -43,7 +42,7 @@ public void draw(){
   background(230,230,230);
 
   
-  if ( myPort != null)
+  if ( myPort != null && !gondermeAktif)
   {
     while (myPort.available() > 0) {
     int inByte = myPort.read();
@@ -64,7 +63,16 @@ public void draw(){
   } else {
     textfieldCagriAdi.setText(json.getString("CagriIsareti"));
     
+    if (json.getInt("CagriIsaretiSSID") == 0) dropListSSID.setSelected(0);
+    if (json.getInt("CagriIsaretiSSID") == 7) dropListSSID.setSelected(1);
+    if (json.getInt("CagriIsaretiSSID") == 9) dropListSSID.setSelected(2);
+    
+    if (json.getString("Sembol") == "-") dropListSembol.setSelected(0); //ev
+    if (json.getString("Sembol") == "<") dropListSembol.setSelected(2); //motorsiklet
+    if (json.getString("Sembol") == ">") dropListSembol.setSelected(3); //araba
+    
     textfieldMesaj.setText(json.getString("Mesaj"));
+    
 
   }
   yeniVeri = false;  
@@ -83,23 +91,23 @@ synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:serip
 } //_CODE_:seriportWindow:303233:
 
 synchronized public void preSeriportWindow(PApplet appc, GWinData data) { //_CODE_:seriportWindow:982297:
-  println("seriportWindow - pre method called " + millis());
+//  println("seriportWindow - pre method called " + millis());
 } //_CODE_:seriportWindow:982297:
 
 synchronized public void postSeriportWindow(PApplet appc, GWinData data) { //_CODE_:seriportWindow:981943:
-  println("seriportWindow - post method called " + millis());
+//  println("seriportWindow - post method called " + millis());
 } //_CODE_:seriportWindow:981943:
 
 public void oncloseSeriportWindow(GWindow window) { //_CODE_:seriportWindow:346375:
-  println("seriportWindow - window closed at " + millis());
+//  println("seriportWindow - window closed at " + millis());
 } //_CODE_:seriportWindow:346375:
 
 public void buttonBaglanClick(GButton source, GEvent event) { //_CODE_:buttonBaglan:635785:
-  println("buttonBaglan - GButton >> GEvent." + event + " @ " + millis());
+//  println("buttonBaglan - GButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:buttonBaglan:635785:
 
 public void imgButton3_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonTamsat:765992:
-  println("imgButton3 - GImageButton >> GEvent." + event + " @ " + millis());
+//  println("imgButton3 - GImageButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:imgButtonTamsat:765992:
 
 synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:splashScreen:721218:
@@ -107,70 +115,106 @@ synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:splas
 } //_CODE_:splashScreen:721218:
 
 public void imgButton1_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonTamsatLogo:646942:
-  println("imgButton1 - GImageButton >> GEvent." + event + " @ " + millis());
+//  println("imgButton1 - GImageButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:imgButtonTamsatLogo:646942:
 
 public void imgButton2_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonTamsatInfo:450767:
-  println("imgButton2 - GImageButton >> GEvent." + event + " @ " + millis());
+//  println("imgButton2 - GImageButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:imgButtonTamsatInfo:450767:
 
 public void checkboxLokasyon_clicked1(GCheckbox source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
-  println("checkboxLokasyon - GCheckbox >> GEvent." + event + " @ " + millis());
+//  println("checkboxLokasyon - GCheckbox >> GEvent." + event + " @ " + millis());
 } //_CODE_:checkboxLokasyon:939952:
 
 public void checkboxYukseklik_clicked1(GCheckbox source, GEvent event) { //_CODE_:checkboxYukseklik:919125:
-  println("checkbox2 - GCheckbox >> GEvent." + event + " @ " + millis());
+//  println("checkbox2 - GCheckbox >> GEvent." + event + " @ " + millis());
 } //_CODE_:checkboxYukseklik:919125:
 
 public void sliderZamanlama_change1(GSlider source, GEvent event) { //_CODE_:sliderZamanlama:300012:
-  println("sliderZamanlama - GSlider >> GEvent." + event + " @ " + millis());
+//  println("sliderZamanlama - GSlider >> GEvent." + event + " @ " + millis());
 } //_CODE_:sliderZamanlama:300012:
 
 public void checkboxBatarya_clicked1(GCheckbox source, GEvent event) { //_CODE_:checkboxBatarya:493573:
-  println("checkboxBatarya - GCheckbox >> GEvent." + event + " @ " + millis());
+//  println("checkboxBatarya - GCheckbox >> GEvent." + event + " @ " + millis());
 } //_CODE_:checkboxBatarya:493573:
 
+/* 
+ * Programda ayarlanan degerlerin seri porttan Tracker a gonderilmesi 
+ */
 public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSend:872700:
-  println("buttonSend - GButton >> GEvent." + event + " @ " + millis());
+//  println("buttonSend - GButton >> GEvent." + event + " @ " + millis());
+  gondermeAktif = true;
+   myPort.write('!'); // Seri porttan Tracker'a bilgileri gonder
+   delay(2000);
+   myPort.write('W'); // Seri porttan Tracker'a bilgileri gonder
+   delay(2000);
+   myPort.write(0x01);
+   myPort.write(Versiyon);
+   myPort.write(0x09);
+   myPort.write(textfieldCagriAdi.getText());                       // Cagri ISareti
+   myPort.write(0x09);
+   if (dropListSSID.getSelectedIndex() == 0) myPort.write("0");    //SSID 0
+   if (dropListSSID.getSelectedIndex() == 1) myPort.write("7");    //SSID 7 
+   if (dropListSSID.getSelectedIndex() == 2) myPort.write("9");    //SSID 9
+   myPort.write(0x09);
+   //TODO: Destination, Path1, Path2 buraya kjoyulabilir
+   if (dropListSembol.getSelectedIndex() == 0) myPort.write("-");  //Sembol
+   if (dropListSembol.getSelectedIndex() == 1) myPort.write("<");  //Sembol
+   if (dropListSembol.getSelectedIndex() == 2) myPort.write(">");  //Sembol
+   myPort.write(0x09);
+   myPort.write('/'); //Sembol Tabi
+   myPort.write(0x09);
+   myPort.write("1");  //Beacon Tipi
+   myPort.write(0x09);
+   myPort.write("60");  //Beacon Suresi  //TODO: ekrandan al
+   myPort.write(0x09);
+   myPort.write(textfieldMesaj.getText()); //Mesaj
+   myPort.write(0x09);
+   myPort.write("9600");  //GPS Hizi  //TODO: ekrandan GPS hizini listeden alip gonder
+
+  gondermeAktif = false;
+  //myPort.write('P');
 } //_CODE_:buttonSend:872700:
 
 public void textfieldCagriAdi_change1(GTextField source, GEvent event) { //_CODE_:textfieldCagriAdi:558481:
-  println("textfieldCagriAdi - GTextField >> GEvent." + event + " @ " + millis());
+//  println("textfieldCagriAdi - GTextField >> GEvent." + event + " @ " + millis());
 } //_CODE_:textfieldCagriAdi:558481:
 
 public void dropListSeriPort_click1(GDropList source, GEvent event) {
-  println("dropListSeriPort - GDropList >> GEvent." + event + " @ " + millis());
+//  println("dropListSeriPort - GDropList >> GEvent." + event + " @ " + millis());
   myPort = new Serial(this, source.getSelectedText(), 115200);
   delay(5000);
   myPort.write('!');
 }
 
 public void dropListSSID_click1(GDropList source, GEvent event) { //_CODE_:dropListSSID:560365:
-  println("dropListSSID - GDropList >> GEvent." + event + " @ " + millis());
+//  println("dropListSSID - GDropList >> GEvent." + event + " @ " + millis());
 } //_CODE_:dropListSSID:560365:
 
 public void dropListSembol_click1(GDropList source, GEvent event) { //_CODE_:dropListSembol:606061:
-  println("dropListSembol - GDropList >> GEvent." + event + " @ " + millis());
+//  println("dropListSembol - GDropList >> GEvent." + event + " @ " + millis());
 } //_CODE_:dropListSembol:606061:
 
 public void dropListGPSHizi_click1(GDropList source, GEvent event) { //_CODE_:dropListGPSHizi:549444:
-  println("dropListGPSHizi - GDropList >> GEvent." + event + " @ " + millis());
+//  println("dropListGPSHizi - GDropList >> GEvent." + event + " @ " + millis());
 } //_CODE_:dropListGPSHizi:549444:
 
 public void textfieldMesaj_change1(GTextField source, GEvent event) { //_CODE_:textfieldMesaj:236196:
-  println("textfieldMesaj - GTextField >> GEvent." + event + " @ " + millis());
+//  println("textfieldMesaj - GTextField >> GEvent." + event + " @ " + millis());
 } //_CODE_:textfieldMesaj:236196:
 
 public void sliderPreamble_change1(GSlider source, GEvent event) { //_CODE_:sliderPreamble:934008:
-  println("sliderPreamble - GSlider >> GEvent." + event + " @ " + millis());
+//  println("sliderPreamble - GSlider >> GEvent." + event + " @ " + millis());
 } //_CODE_:sliderPreamble:934008:
 
 public void sliderTXDelay_change1(GSlider source, GEvent event) { //_CODE_:sliderTXDelay:750989:
-  println("sliderTXDelay - GSlider >> GEvent." + event + " @ " + millis());
+//  println("sliderTXDelay - GSlider >> GEvent." + event + " @ " + millis());
 } //_CODE_:sliderTXDelay:750989:
 
 public void buttonReceive_click1(GButton source, GEvent event) { //_CODE_:buttonReceive:300015:
-  println("buttonReceive - GButton >> GEvent." + event + " @ " + millis());
+//  println("buttonReceive - GButton >> GEvent." + event + " @ " + millis());
+  myPort.write('!'); // Seri porttan Tracker bilgilerini Oku
+  delay(1000);
   myPort.write('R'); // Seri porttan Tracker bilgilerini Oku
 } //_CODE_:buttonReceive:300015:
 
@@ -186,12 +230,12 @@ public void splashGUI(){
   imgButtonTamsatLogo.addEventHandler(this, "imgButton1_click1");
   imgButtonTamsatInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png" } );
   imgButtonTamsatInfo.addEventHandler(this, "imgButton2_click1");
-  labelProgramAdi = labelFn(splashScreen, "hymTR APRS Tracker", 80, 101, 270, 30);
+  labelProgramAdi = labelFn(splashScreen, "hymTR APRS Tracker", 80, 85, 270, 30);
   labelProgramAdi.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 150, 140, 120, 20);
-  baris = labelFn(splashScreen,"Baris DINC", 50, 170, 80, 20);
-  burcu = labelFn(splashScreen, "Burcu AYBAK", 170, 170, 80, 20);
-  emre = labelFn(splashScreen, "Emre KELES", 290, 170, 80, 20);
+  hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 160, 125, 120, 20);
+  baris = labelFn(splashScreen,"Baris DINC\n  (TA7W)", 50, 150, 80, 30);
+  burcu = labelFn(splashScreen, "Burcu AYBAK\n  (TA2NBA)", 170, 150, 90, 30);
+  emre = labelFn(splashScreen, "Emre KELES\n (TA6AUE)", 290, 150, 80, 30);
 
   splashScreen.loop();
 }
@@ -200,10 +244,10 @@ public void createMainGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.GOLD_SCHEME);
   G4P.setMouseOverEnabled(false);
-  surface.setTitle("hymTR Ayar Programi");
+  surface.setTitle("hymTR Ayar Programi (v01012020a)");
   String[] seriPortListesi = Serial.list();
   String[] ssidListesi = {"-0 Sabit Merkez","-7 El Telsizi ile hareketli","-9 Mobil arac"};
-  String[] semboller = {"Ev","El Telsizi","Motorsiklet","Araba"};
+  String[] semboller = {"Ev","Motorsiklet","Araba"};
   String[] gpsHizlari = {"4800","9600","57600","115200"};
   
   labelSeriPort = labelFn(this, "Seri Port", 20, 10, 80, 20);
@@ -218,7 +262,7 @@ public void createMainGUI(){
   radioButtonGPSVar = radioButtonFn("Var", "radioButtonGPSVar_clicked1", false, 100, 100, 50, 20);
   radioButtonGPSYok = radioButtonFn("Yok", "radioButtonGPSYok_clicked1", false, 160, 100, 50, 20);
   labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 250, 100, 80, 20);
-  dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 330, 100, 120, 80, 3, 10);
+  dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 330, 100, 120, 80, 4, 10);
   labelMesaj = labelFn(this, "Mesaj", 20, 130, 80, 20);
   textfieldMesaj = textFieldFn("QRV 145.500 Ceptel: 0 5XX XXX XX XX", "textfieldMesaj_change1", 100, 130, 350, 20, G4P.SCROLLBARS_NONE);
   labelGonder = labelFn(this, "Gonder", 20, 160, 80, 20);
