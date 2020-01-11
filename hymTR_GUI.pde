@@ -3,6 +3,33 @@ import g4p_controls.*;
 import processing.serial.*;
 Serial myPort;
 
+String SeriJSON = "";
+boolean yeniVeri = false;
+boolean veriBasi = false;
+
+public class APRS_Ayarlari {
+  String[] APRS_CagriIsareti;
+  char APRS_CagriIsaretiSSID;
+  String[] APRS_Destination;
+  char APRS_DestinationSSID;  
+  String[] APRS_Path1;
+  char APRS_Path1SSID;
+  String[] APRS_Path2;
+  char APRS_Path2SSID;
+  char APRS_Sembolu;
+  char APRS_SembolTabi;
+  byte APRS_BeaconTipi;    //0=sure beklemeli, 1=Smart Beacon
+  long APRS_BeaconSuresi;
+  long  APRS_GPSSeriHizi;    
+  String[] APRS_Mesaj;
+  long CheckSum;    //Cagri isaretinin byte toplamini kullaniyoruz
+};
+
+
+
+
+
+
 public void setup(){
   size(460, 500, JAVA2D);
   splashGUI();
@@ -14,16 +41,37 @@ public void setup(){
 
 public void draw(){
   background(230,230,230);
+
   
   if ( myPort != null)
   {
     while (myPort.available() > 0) {
     int inByte = myPort.read();
+    if (inByte == '{') {println(); SeriJSON = ""; veriBasi = true;}
+    if (veriBasi && inByte != '>' ) SeriJSON += (char)inByte;
     print((char)inByte);
-  }
+    if (inByte == '}') { println(); yeniVeri = true; veriBasi=false;}
+    }
   }
   
-}
+  if (yeniVeri) 
+  {
+   //TODO: Ekrani doldur
+//{'V':'01012020a','CagriIsareti':'TAMSAT','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'TAMSAT hymTR APRS Tracker','GPSHizi':9600}
+  JSONObject json = parseJSONObject(SeriJSON);
+  if (json == null) {
+    println("Veri Cozumlenemedi");
+  } else {
+    textfieldCagriAdi.setText(json.getString("CagriIsareti"));
+    
+    textfieldMesaj.setText(json.getString("Mesaj"));
+
+  }
+  yeniVeri = false;  
+  }
+  
+  
+} // draw()
 
 public void timer1_Action1(GTimer source) { //_CODE_:timer1:910330:
   println("timer1 - GTimer >> an event occured @ " + millis());
@@ -123,7 +171,7 @@ public void sliderTXDelay_change1(GSlider source, GEvent event) { //_CODE_:slide
 
 public void buttonReceive_click1(GButton source, GEvent event) { //_CODE_:buttonReceive:300015:
   println("buttonReceive - GButton >> GEvent." + event + " @ " + millis());
-  myPort.write('P');
+  myPort.write('R'); // Seri porttan Tracker bilgilerini Oku
 } //_CODE_:buttonReceive:300015:
 
 public void splashGUI(){
