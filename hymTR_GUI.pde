@@ -55,30 +55,26 @@ public void draw(){
   
   if (yeniVeri) 
   {
-   //TODO: Ekrani doldur
-//{'V':'01012020a','CagriIsareti':'TAMSAT','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'TAMSAT hymTR APRS Tracker','GPSHizi':9600}
-  JSONObject json = parseJSONObject(SeriJSON);
-  if (json == null) {
-    println("Veri Cozumlenemedi");
-  } else {
-    textfieldCagriAdi.setText(json.getString("CagriIsareti"));
-    
-    if (json.getInt("CagriIsaretiSSID") == 0) dropListSSID.setSelected(0);
-    if (json.getInt("CagriIsaretiSSID") == 7) dropListSSID.setSelected(1);
-    if (json.getInt("CagriIsaretiSSID") == 9) dropListSSID.setSelected(2);
-    
-    if (json.getString("Sembol") == "-") dropListSembol.setSelected(0); //ev
-    if (json.getString("Sembol") == "<") dropListSembol.setSelected(2); //motorsiklet
-    if (json.getString("Sembol") == ">") dropListSembol.setSelected(3); //araba
-    
-    textfieldMesaj.setText(json.getString("Mesaj"));
-    
-
+     //TODO: Ekrani doldur
+  //{'V':'01012020a','CagriIsareti':'TAMSAT','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'TAMSAT hymTR APRS Tracker','GPSHizi':9600}
+    JSONObject json = parseJSONObject(SeriJSON);
+    if (json == null) {
+      println("Veri Cozumlenemedi");
+    } else {
+      textfieldCagriAdi.setText(json.getString("CagriIsareti"));
+      
+      if (json.getInt("CagriIsaretiSSID") == 0) dropListSSID.setSelected(0);
+      if (json.getInt("CagriIsaretiSSID") == 7) dropListSSID.setSelected(1);
+      if (json.getInt("CagriIsaretiSSID") == 9) dropListSSID.setSelected(2);
+      
+      if (json.getString("Sembol") == "-") dropListSembol.setSelected(0); //ev
+      if (json.getString("Sembol") == "<") dropListSembol.setSelected(2); //motorsiklet
+      if (json.getString("Sembol") == ">") dropListSembol.setSelected(3); //araba
+      
+      textfieldMesaj.setText(json.getString("Mesaj"));
+    }
+    yeniVeri = false;  
   }
-  yeniVeri = false;  
-  }
-  
-  
 } // draw()
 
 public void timer1_Action1(GTimer source) { //_CODE_:timer1:910330:
@@ -122,6 +118,34 @@ public void imgButton2_click1(GImageButton source, GEvent event) { //_CODE_:imgB
 //  println("imgButton2 - GImageButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:imgButtonTamsatInfo:450767:
 
+public void radioButtonGPSVar_clicked1(GOption source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
+  radioButtonGPSVar.setSelected(true);
+  radioButtonGPSYok.setSelected(false);
+  labelGPSPortHizi.setVisible(true);
+  dropListGPSHizi.setVisible(true);
+  labelLatitude.setVisible(false);
+  textfieldLatitude.setVisible(false);
+  labelLongitude.setVisible(false);
+  textfieldLongitude.setVisible(false);
+  labelAltitude.setVisible(false);
+  textfieldAltitude.setVisible(false);
+  println("checkboxGPS - GCheckbox >> GEvent." + event + " @ " + millis());
+} //_CODE_:checkboxLokasyon:939952:
+
+public void radioButtonGPSYok_clicked1(GOption source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
+  radioButtonGPSVar.setSelected(false);
+  radioButtonGPSYok.setSelected(true);
+  labelGPSPortHizi.setVisible(false);
+  dropListGPSHizi.setVisible(false);
+  labelLatitude.setVisible(true);
+  textfieldLatitude.setVisible(true);
+  labelLongitude.setVisible(true);
+  textfieldLongitude.setVisible(true);
+  labelAltitude.setVisible(true);
+  textfieldAltitude.setVisible(true);
+  println("checkboxGPS - GCheckbox >> GEvent." + event + " @ " + millis());
+} //_CODE_:checkboxLokasyon:939952:
+
 public void checkboxLokasyon_clicked1(GCheckbox source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
 //  println("checkboxLokasyon - GCheckbox >> GEvent." + event + " @ " + millis());
 } //_CODE_:checkboxLokasyon:939952:
@@ -138,41 +162,80 @@ public void checkboxBatarya_clicked1(GCheckbox source, GEvent event) { //_CODE_:
 //  println("checkboxBatarya - GCheckbox >> GEvent." + event + " @ " + millis());
 } //_CODE_:checkboxBatarya:493573:
 
+public void textfieldLatitude_change1(GTextField textfield, GEvent event) { /* code */ }
+
+public void textfieldLongitude_change1(GTextField textfield, GEvent event) { /* code */ }
+
+public void textfieldAltitude_change1(GTextField textfield, GEvent event) { /* code */ }
 /* 
  * Programda ayarlanan degerlerin seri porttan Tracker a gonderilmesi 
  */
 public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSend:872700:
-//  println("buttonSend - GButton >> GEvent." + event + " @ " + millis());
-  gondermeAktif = true;
-   myPort.write('!'); // Seri porttan Tracker'a bilgileri gonder
+   gondermeAktif = true;
+   myPort.write('!');                                                    // Seri porttan Tracker'a bilgileri gonder
    delay(2000);
-   myPort.write('W'); // Seri porttan Tracker'a bilgileri gonder
+   myPort.write('W');                                                    // Seri porttan Tracker'a bilgileri gonder
    delay(2000);
    myPort.write(0x01);
    myPort.write(Versiyon);
    myPort.write(0x09);
-   myPort.write(textfieldCagriAdi.getText());                       // Cagri ISareti
+   myPort.write(textfieldCagriAdi.getText());                            //Cagri ISareti
    myPort.write(0x09);
-   if (dropListSSID.getSelectedIndex() == 0) myPort.write("0");    //SSID 0
-   if (dropListSSID.getSelectedIndex() == 1) myPort.write("7");    //SSID 7 
-   if (dropListSSID.getSelectedIndex() == 2) myPort.write("9");    //SSID 9
+   if (dropListSSID.getSelectedIndex() == 0) myPort.write("0");          //SSID 0
+   if (dropListSSID.getSelectedIndex() == 1) myPort.write("7");          //SSID 7 
+   if (dropListSSID.getSelectedIndex() == 2) myPort.write("9");          //SSID 9
    myPort.write(0x09);
-   //TODO: Destination, Path1, Path2 buraya kjoyulabilir
-   if (dropListSembol.getSelectedIndex() == 0) myPort.write("-");  //Sembol
-   if (dropListSembol.getSelectedIndex() == 1) myPort.write("<");  //Sembol
-   if (dropListSembol.getSelectedIndex() == 2) myPort.write(">");  //Sembol
+   myPort.write("HYMTR ");                                               //Destination
    myPort.write(0x09);
-   myPort.write('/'); //Sembol Tabi
+   myPort.write("0");                                                    //DestinationSSID
    myPort.write(0x09);
-   myPort.write("1");  //Beacon Tipi
+   myPort.write("WIDE1 ");                                               //Path1
    myPort.write(0x09);
-   myPort.write("60");  //Beacon Suresi  //TODO: ekrandan al
+   myPort.write("1");                                                    //Path1SSID
    myPort.write(0x09);
-   myPort.write(textfieldMesaj.getText()); //Mesaj
+   myPort.write("WIDE2 ");                                               //Path2
    myPort.write(0x09);
-   myPort.write("9600");  //GPS Hizi  //TODO: ekrandan GPS hizini listeden alip gonder
-
-  gondermeAktif = false;
+   myPort.write("1");                                                    //Path2SSID
+   myPort.write(0x09);
+   if (dropListSembol.getSelectedIndex() == 0) myPort.write("-");        //Sembol
+   if (dropListSembol.getSelectedIndex() == 1) myPort.write("<");        //Sembol
+   if (dropListSembol.getSelectedIndex() == 2) myPort.write(">");        //Sembol
+   myPort.write(0x09);
+   myPort.write('/');                                                    //Sembol Tabi
+   myPort.write(0x09);
+   myPort.write("1");                                                    //Beacon Tipi
+   myPort.write(0x09);
+   myPort.write((int)sliderZamanlama.getValueI());                       //Beacon Suresi
+   myPort.write(0x09);
+   if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
+   if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
+   if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
+   if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
+   myPort.write(0x09);
+   myPort.write(textfieldMesaj.getText());                               //Mesaj
+   myPort.write(0x09);
+   if (radioButtonGPSVar.isSelected()) myPort.write("1");                //GPS Var
+   if (radioButtonGPSYok.isSelected()) myPort.write("0");                //GPS Yok
+   myPort.write(0x09);
+   if (checkboxLokasyon.isSelected() && !checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("1");         //Lokasyon
+   if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("2");          //Lokasyon
+   if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && checkboxBatarya.isSelected()) myPort.write("4");           //Lokasyon
+   myPort.write(0x09);
+   long preambleSuresi = (long)sliderZamanlama.getValueI();
+   myPort.write((int)(preambleSuresi/256));                              //Preamble Suresi
+   myPort.write((int)(preambleSuresi-(int)(preambleSuresi/256)*256));    //Preamble Suresi
+   myPort.write(0x09);
+   long txDelaySuresi = (long)sliderTXDelay.getValueI();
+   myPort.write((int)(txDelaySuresi/256));                               //Kuyruk Suresi
+   myPort.write((int)(txDelaySuresi-(int)(txDelaySuresi/256)*256));      //Kuyruk Suresi
+   myPort.write(0x09);
+   myPort.write(textfieldLatitude.getText());                            //Lat
+   myPort.write(0x09);
+   myPort.write(textfieldLongitude.getText());                           //Lon
+   myPort.write(0x09);
+   myPort.write(textfieldAltitude.getText());                            //Alt
+   myPort.write(0x09);
+   gondermeAktif = false;
   //myPort.write('P');
 } //_CODE_:buttonSend:872700:
 
@@ -249,34 +312,61 @@ public void createMainGUI(){
   String[] ssidListesi = {"-0 Sabit Merkez","-7 El Telsizi ile hareketli","-9 Mobil arac"};
   String[] semboller = {"Ev","Motorsiklet","Araba"};
   String[] gpsHizlari = {"4800","9600","57600","115200"};
-  
+  gpsOptionGroup = new GToggleGroup();
+
   labelSeriPort = labelFn(this, "Seri Port", 20, 10, 80, 20);
-  dropListSeriPort = dropListFn(seriPortListesi, "dropListSeriPort_click1", 99, 10, 351, 80, 3, 10);
+  dropListSeriPort = dropListFn(seriPortListesi, "dropListSeriPort_click1", 76, 10, 374, 80, 3, 10);
+  
   labelCagriAdi = labelFn(this, "Cagriadi", 20, 40, 80, 20);
-  textfieldCagriAdi = textFieldFn("TA7W", "textfieldCagriAdi_change1", 99, 40, 150, 20, G4P.SCROLLBARS_NONE);
+  textfieldCagriAdi = textFieldFn("TA7W", "textfieldCagriAdi_change1", 76, 40, 150, 20, G4P.SCROLLBARS_NONE);
   labelSSID = labelFn(this, "SSID", 253, 40, 36, 20);
   dropListSSID = dropListFn(ssidListesi, "dropListSSID_click1", 290, 40, 160, 80, 3, 10);
+  
   labelSembol = labelFn(this, "Sembol", 20, 70, 80, 20);
-  dropListSembol = dropListFn(semboller, "dropListSembol_click1", 100, 70, 150, 80, 3, 10);
+  dropListSembol = dropListFn(semboller, "dropListSembol_click1", 76, 70, 150, 80, 3, 10);
+  
   labelGPS = labelFn(this, "GPS", 20, 100, 80, 20);
-  radioButtonGPSVar = radioButtonFn("Var", "radioButtonGPSVar_clicked1", false, 100, 100, 50, 20);
-  radioButtonGPSYok = radioButtonFn("Yok", "radioButtonGPSYok_clicked1", false, 160, 100, 50, 20);
-  labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 250, 100, 80, 20);
-  dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 330, 100, 120, 80, 4, 10);
+  radioButtonGPSVar = radioButtonFn("Var", "radioButtonGPSVar_clicked1", true, 76, 100, 50, 20); 
+  radioButtonGPSYok = radioButtonFn("Yok", "radioButtonGPSYok_clicked1", false, 134, 100, 50, 20);
+  labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 207, 100, 80, 20);
+  dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 290, 100, 160, 92, 4, 10);
+  labelLatitude = labelFn(this, "Lat", 190, 100, 80, 20);// -9012.12,N
+  textfieldLatitude = textFieldFn("4996.46N", "textfieldLatitude_change1", 210, 100, 66, 20, G4P.SCROLLBARS_NONE);
+  labelLongitude = labelFn(this, "Lon", 280, 100, 80, 20);// -180,180
+  textfieldLongitude = textFieldFn("14996.46W", "textfieldLongitude_change1", 304, 100, 74, 20, G4P.SCROLLBARS_NONE);
+  labelAltitude = labelFn(this, "Alt", 382, 100, 80, 20);
+  textfieldAltitude = textFieldFn("349969", "textfieldAltitude_change1", 400, 100, 50, 20, G4P.SCROLLBARS_NONE);
+  
   labelMesaj = labelFn(this, "Mesaj", 20, 130, 80, 20);
-  textfieldMesaj = textFieldFn("QRV 145.500 Ceptel: 0 5XX XXX XX XX", "textfieldMesaj_change1", 100, 130, 350, 20, G4P.SCROLLBARS_NONE);
+  textfieldMesaj = textFieldFn("QRV 145.500 Ceptel: 0 5XX XXX XX XX", "textfieldMesaj_change1", 76, 130, 374, 20, G4P.SCROLLBARS_NONE);
+  
   labelGonder = labelFn(this, "Gonder", 20, 160, 80, 20);
-  checkboxLokasyon = checkboxFn("Lokasyon", "checkboxLokasyon_clicked1", true, 100, 160, 150, 20);
-  checkboxYukseklik = checkboxFn("Yukseklik", "checkboxYukseklik_clicked1", false, 100, 180, 150, 20);
-  checkboxBatarya = checkboxFn("Batarya Durumu", "checkboxBatarya_clicked1", false, 100, 200, 150, 20);
+  checkboxLokasyon = checkboxFn("Lokasyon", "checkboxLokasyon_clicked1", true, 76, 160, 150, 20);
+  checkboxYukseklik = checkboxFn("Yukseklik", "checkboxYukseklik_clicked1", false, 76, 180, 150, 20);
+  checkboxBatarya = checkboxFn("Batarya Durumu", "checkboxBatarya_clicked1", false, 76, 200, 150, 20);
+  
   labelAkilliBeacon = labelFn(this, "Akilli Beacon (Dakika)", 10, 220, 180, 20);
   sliderZamanlama = sliderFn(1, 1, 60, 10, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
+  
   labelPreambleSuresi = labelFn(this, "Preamble Suresi (milisaniye)", 10, 300, 180, 20);
   sliderPreamble = sliderFn(350, 100, 1000, 20, "sliderPreamble_change1", 10, 320, 440, 50, 10.0);
+  
   labelKuyrukSuresi = labelFn(this, "Kuyruk Suresi (milisaniye)", 10, 380, 190, 20);
   sliderTXDelay = sliderFn(100, 50, 500, 9, "sliderTXDelay_change1", 10, 400, 440, 50, 10.0);
+  
   buttonReceive = buttonFn("Bilgileri Cihazdan Al", "buttonReceive_click1", 10, 460, 210, 30);
   buttonSend = buttonFn("Bilgileri Cihaza Yukle", "buttonSend_click1", 229, 460, 220, 30);
+  
+  gpsOptionGroup.addControl(radioButtonGPSVar);
+  gpsOptionGroup.addControl(radioButtonGPSYok);
+  labelGPSPortHizi.setVisible(true);
+  dropListGPSHizi.setVisible(true);
+  labelLatitude.setVisible(false);
+  textfieldLatitude.setVisible(false);
+  labelLongitude.setVisible(false);
+  textfieldLongitude.setVisible(false);
+  labelAltitude.setVisible(false);
+  textfieldAltitude.setVisible(false);
 }
 
 public GLabel labelFnT(PApplet theApplet, String name, float leftMargin, float topMargin, float itemSizeX, float itemSizeY) {
@@ -365,12 +455,6 @@ public GButton buttonFn(String definition, String controlFn, float leftMargin, f
   return genButton;
 }
 
-
-
-
-
-
-
 // Variable declarations 
 // splashScreen variables
 GWindow splashScreen;
@@ -390,6 +474,9 @@ GLabel labelSSID;
 GLabel labelSembol;
 GLabel labelGPS;
 GLabel labelGPSPortHizi; 
+GLabel labelLatitude;
+GLabel labelLongitude;
+GLabel labelAltitude;
 GLabel labelMesaj; 
 GLabel labelGonder; 
 GLabel labelAkilliBeacon; 
@@ -398,7 +485,10 @@ GLabel labelKuyrukSuresi;
 GOption radioButtonGPSVar;
 GOption radioButtonGPSYok;
 GTextField textfieldCagriAdi; 
-GTextField textfieldMesaj; 
+GTextField textfieldMesaj;
+GTextField textfieldLatitude;
+GTextField textfieldLongitude;
+GTextField textfieldAltitude;
 GCheckbox checkboxLokasyon; 
 GCheckbox checkboxYukseklik; 
 GCheckbox checkboxBatarya; 
@@ -412,3 +502,4 @@ GSlider sliderTXDelay;
 GButton buttonReceive; 
 GButton buttonSend; 
 GTimer timer1;
+GToggleGroup gpsOptionGroup;
