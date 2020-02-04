@@ -207,34 +207,34 @@ public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSen
    myPort.write(0x09);
    myPort.write((int)sliderZamanlama.getValueI());                       //Beacon Suresi
    myPort.write(0x09);
-   if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
-   if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
-   if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
-   if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
-   myPort.write(0x09);
+   //if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
+   //myPort.write(0x09);
    myPort.write(textfieldMesaj.getText());                               //Mesaj
    myPort.write(0x09);
-   if (radioButtonGPSVar.isSelected()) myPort.write("1");                //GPS Var
-   if (radioButtonGPSYok.isSelected()) myPort.write("0");                //GPS Yok
-   myPort.write(0x09);
-   if (checkboxLokasyon.isSelected() && !checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("1");         //Lokasyon
-   if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("2");          //Lokasyon
-   if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && checkboxBatarya.isSelected()) myPort.write("4");           //Lokasyon
-   myPort.write(0x09);
-   long preambleSuresi = (long)sliderZamanlama.getValueI();
-   myPort.write((int)(preambleSuresi/256));                              //Preamble Suresi
-   myPort.write((int)(preambleSuresi-(int)(preambleSuresi/256)*256));    //Preamble Suresi
-   myPort.write(0x09);
-   long txDelaySuresi = (long)sliderTXDelay.getValueI();
-   myPort.write((int)(txDelaySuresi/256));                               //Kuyruk Suresi
-   myPort.write((int)(txDelaySuresi-(int)(txDelaySuresi/256)*256));      //Kuyruk Suresi
-   myPort.write(0x09);
-   myPort.write(textfieldLatitude.getText());                            //Lat
-   myPort.write(0x09);
-   myPort.write(textfieldLongitude.getText());                           //Lon
-   myPort.write(0x09);
-   myPort.write(textfieldAltitude.getText());                            //Alt
-   myPort.write(0x09);
+   //if (radioButtonGPSVar.isSelected()) myPort.write("1");                //GPS Var
+   //if (radioButtonGPSYok.isSelected()) myPort.write("0");                //GPS Yok
+   //myPort.write(0x09);
+   //if (checkboxLokasyon.isSelected() && !checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("1");         //Lokasyon
+   //if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("2");          //Lokasyon
+   //if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && checkboxBatarya.isSelected()) myPort.write("4");           //Lokasyon
+   //myPort.write(0x09);
+   //long preambleSuresi = (long)sliderZamanlama.getValueI();
+   //myPort.write((int)(preambleSuresi/256));                              //Preamble Suresi
+   //myPort.write((int)(preambleSuresi-(int)(preambleSuresi/256)*256));    //Preamble Suresi
+   //myPort.write(0x09);
+   //long txDelaySuresi = (long)sliderTXDelay.getValueI();
+   //myPort.write((int)(txDelaySuresi/256));                               //Kuyruk Suresi
+   //myPort.write((int)(txDelaySuresi-(int)(txDelaySuresi/256)*256));      //Kuyruk Suresi
+   //myPort.write(0x09);
+   //myPort.write(textfieldLatitude.getText());                            //Lat
+   //myPort.write(0x09);
+   //myPort.write(textfieldLongitude.getText());                           //Lon
+   //myPort.write(0x09);
+   //myPort.write(textfieldAltitude.getText());                            //Alt
+   //myPort.write(0x09);
    gondermeAktif = false;
   //myPort.write('P');
 } //_CODE_:buttonSend:872700:
