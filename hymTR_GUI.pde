@@ -75,6 +75,8 @@ public void draw(){
       sliderZamanlama.setValue(json.getInt("BeaconSuresi"));
     }
     yeniVeri = false;  
+    labelStatusMesaj.setText("Veriler Okundu");
+
   }
 } // draw()
 
@@ -172,6 +174,7 @@ public void textfieldAltitude_change1(GTextField textfield, GEvent event) { /* c
  * Programda ayarlanan degerlerin seri porttan Tracker a gonderilmesi 
  */
 public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSend:872700:
+   labelStatusMesaj.setText("Veriler gonderiliyor...");
    gondermeAktif = true;
    myPort.write('!');                                                    // Seri porttan Tracker'a bilgileri gonder
    delay(2000);
@@ -238,6 +241,7 @@ public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSen
    myPort.write(textfieldAltitude.getText());                            //Alt
    myPort.write(0x09);
    gondermeAktif = false;
+   labelStatusMesaj.setText("Veriler gonderildi");
   //myPort.write('P');
 } //_CODE_:buttonSend:872700:
 
@@ -247,9 +251,11 @@ public void textfieldCagriAdi_change1(GTextField source, GEvent event) { //_CODE
 
 public void dropListSeriPort_click1(GDropList source, GEvent event) {
 //  println("dropListSeriPort - GDropList >> GEvent." + event + " @ " + millis());
+  labelStatusMesaj.setText("Seri port aciliyor");
   myPort = new Serial(this, source.getSelectedText(), 115200);
   delay(5000);
   myPort.write('!');
+  labelStatusMesaj.setText("Seri port acildi");
 }
 
 public void dropListSSID_click1(GDropList source, GEvent event) { //_CODE_:dropListSSID:560365:
@@ -278,6 +284,7 @@ public void sliderTXDelay_change1(GSlider source, GEvent event) { //_CODE_:slide
 
 public void buttonReceive_click1(GButton source, GEvent event) { //_CODE_:buttonReceive:300015:
 //  println("buttonReceive - GButton >> GEvent." + event + " @ " + millis());
+  labelStatusMesaj.setText("Okuma Baslatildi");
   myPort.write('!'); // Seri porttan Tracker bilgilerini Oku
   delay(1000);
   myPort.write('R'); // Seri porttan Tracker bilgilerini Oku
@@ -358,6 +365,8 @@ public void createMainGUI(){
   labelKuyrukSuresi = labelFn(this, "Kuyruk Suresi (milisaniye)", 10, 380, 190, 20);
   sliderTXDelay = sliderFn(100, 50, 500, 9, "sliderTXDelay_change1", 10, 400, 440, 50, 10.0);
 */  
+  labelStatusMesaj = labelFn(this, "Program Baslatildi", 180, 430, 190, 20);
+  
   buttonReceive = buttonFn("Bilgileri Cihazdan Al", "buttonReceive_click1", 10, 460, 210, 30);
   buttonSend = buttonFn("Bilgileri Cihaza Yukle", "buttonSend_click1", 229, 460, 220, 30);
   
@@ -365,6 +374,7 @@ public void createMainGUI(){
   gpsOptionGroup.addControl(radioButtonGPSYok);
   //labelGPSPortHizi.setVisible(true);
   //dropListGPSHizi.setVisible(true);
+  labelStatusMesaj.setVisible(true);
   labelLatitude.setVisible(false);
   textfieldLatitude.setVisible(false);
   labelLongitude.setVisible(false);
@@ -486,6 +496,7 @@ GLabel labelGonder;
 GLabel labelAkilliBeacon; 
 GLabel labelPreambleSuresi; 
 GLabel labelKuyrukSuresi;
+GLabel labelStatusMesaj;
 GOption radioButtonGPSVar;
 GOption radioButtonGPSYok;
 GTextField textfieldCagriAdi; 
