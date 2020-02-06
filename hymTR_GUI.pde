@@ -56,7 +56,7 @@ public void draw(){
   if (yeniVeri) 
   {
      //TODO: Ekrani doldur
-  //{'V':'01012020a','CagriIsareti':'TAMSAT','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'TAMSAT hymTR APRS Tracker','GPSHizi':9600}
+  //{'V':'01012020a','CagriIsareti':'TAMSAT','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'TAMSAT iZCi hymTR APRS Tracker','GPSHizi':9600}
     JSONObject json = parseJSONObject(SeriJSON);
     if (json == null) {
       println("Veri Cozumlenemedi");
@@ -67,11 +67,12 @@ public void draw(){
       if (json.getInt("CagriIsaretiSSID") == 7) dropListSSID.setSelected(1);
       if (json.getInt("CagriIsaretiSSID") == 9) dropListSSID.setSelected(2);
       
-      if (json.getString("Sembol") == "-") dropListSembol.setSelected(0); //ev
-      if (json.getString("Sembol") == "<") dropListSembol.setSelected(2); //motorsiklet
-      if (json.getString("Sembol") == ">") dropListSembol.setSelected(3); //araba
+      if (json.getString("Sembol").equals("-")) dropListSembol.setSelected(0); //ev
+      if (json.getString("Sembol").equals("<")) dropListSembol.setSelected(2); //motorsiklet
+      if (json.getString("Sembol").equals(">")) dropListSembol.setSelected(3); //araba
       
       textfieldMesaj.setText(json.getString("Mesaj"));
+      sliderZamanlama.setValue(json.getInt("BeaconSuresi"));
     }
     yeniVeri = false;  
   }
@@ -185,7 +186,7 @@ public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSen
    if (dropListSSID.getSelectedIndex() == 1) myPort.write("7");          //SSID 7 
    if (dropListSSID.getSelectedIndex() == 2) myPort.write("9");          //SSID 9
    myPort.write(0x09);
-   myPort.write("HYMTR ");                                               //Destination
+   myPort.write("iZCi  ");                                               //Destination
    myPort.write(0x09);
    myPort.write("0");                                                    //DestinationSSID
    myPort.write(0x09);
@@ -205,18 +206,18 @@ public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSen
    myPort.write(0x09);
    myPort.write("1");                                                    //Beacon Tipi
    myPort.write(0x09);
-   myPort.write((int)sliderZamanlama.getValueI());                       //Beacon Suresi
+   myPort.write(sliderZamanlama.getValueS());                       //Beacon Suresi
    myPort.write(0x09);
-   //if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
-   //if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
-   //if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
-   //if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
-   //myPort.write(0x09);
+   if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
+   if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
+   if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
+   if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
+   myPort.write(0x09);
    myPort.write(textfieldMesaj.getText());                               //Mesaj
    myPort.write(0x09);
-   //if (radioButtonGPSVar.isSelected()) myPort.write("1");                //GPS Var
-   //if (radioButtonGPSYok.isSelected()) myPort.write("0");                //GPS Yok
-   //myPort.write(0x09);
+   if (radioButtonGPSVar.isSelected()) myPort.write("1");                //GPS Var
+   if (radioButtonGPSYok.isSelected()) myPort.write("0");                //GPS Yok
+   myPort.write(0x09);
    //if (checkboxLokasyon.isSelected() && !checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("1");         //Lokasyon
    //if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && !checkboxBatarya.isSelected()) myPort.write("2");          //Lokasyon
    //if (checkboxLokasyon.isSelected() && checkboxYukseklik.isSelected() && checkboxBatarya.isSelected()) myPort.write("4");           //Lokasyon
@@ -229,12 +230,12 @@ public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSen
    //myPort.write((int)(txDelaySuresi/256));                               //Kuyruk Suresi
    //myPort.write((int)(txDelaySuresi-(int)(txDelaySuresi/256)*256));      //Kuyruk Suresi
    //myPort.write(0x09);
-   //myPort.write(textfieldLatitude.getText());                            //Lat
-   //myPort.write(0x09);
-   //myPort.write(textfieldLongitude.getText());                           //Lon
-   //myPort.write(0x09);
-   //myPort.write(textfieldAltitude.getText());                            //Alt
-   //myPort.write(0x09);
+   myPort.write(textfieldLatitude.getText());                            //Lat
+   myPort.write(0x09);
+   myPort.write(textfieldLongitude.getText());                           //Lon
+   myPort.write(0x09);
+   myPort.write(textfieldAltitude.getText());                            //Alt
+   myPort.write(0x09);
    gondermeAktif = false;
   //myPort.write('P');
 } //_CODE_:buttonSend:872700:
@@ -293,7 +294,7 @@ public void splashGUI(){
   imgButtonTamsatLogo.addEventHandler(this, "imgButton1_click1");
   imgButtonTamsatInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png" } );
   imgButtonTamsatInfo.addEventHandler(this, "imgButton2_click1");
-  labelProgramAdi = labelFn(splashScreen, "hymTR APRS Tracker", 80, 85, 270, 30);
+  labelProgramAdi = labelFn(splashScreen, "iZCi hymTR APRS Tracker", 80, 85, 270, 30);
   labelProgramAdi.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 160, 125, 120, 20);
   baris = labelFn(splashScreen,"Baris DINC\n  (TA7W)", 50, 150, 80, 30);
@@ -307,7 +308,7 @@ public void createMainGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.GOLD_SCHEME);
   G4P.setMouseOverEnabled(false);
-  surface.setTitle("hymTR Ayar Programi (v01012020a)");
+  surface.setTitle("iZCi hymTR Ayar Programi (v01012020a)");
   String[] seriPortListesi = Serial.list();
   String[] ssidListesi = {"-0 Sabit Merkez","-7 El Telsizi ile hareketli","-9 Mobil arac"};
   String[] semboller = {"Ev","Motorsiklet","Araba"};
@@ -330,30 +331,32 @@ public void createMainGUI(){
   radioButtonGPSYok = radioButtonFn("Yok", "radioButtonGPSYok_clicked1", false, 134, 100, 50, 20);
   labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 207, 100, 80, 20);
   dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 290, 100, 160, 92, 4, 10);
-  labelLatitude = labelFn(this, "Lat", 190, 100, 80, 20);// -9012.12,N
-  textfieldLatitude = textFieldFn("4996.46N", "textfieldLatitude_change1", 210, 100, 66, 20, G4P.SCROLLBARS_NONE);
-  labelLongitude = labelFn(this, "Lon", 280, 100, 80, 20);// -180,180
-  textfieldLongitude = textFieldFn("14996.46W", "textfieldLongitude_change1", 304, 100, 74, 20, G4P.SCROLLBARS_NONE);
+  labelLatitude = labelFn(this, "Lat", 190, 100, 80, 20);// -9012.12,N Anitkabir Latitude
+  textfieldLatitude = textFieldFn("3955.50N", "textfieldLatitude_change1", 210, 100, 66, 20, G4P.SCROLLBARS_NONE);
+  labelLongitude = labelFn(this, "Lon", 280, 100, 80, 20);// -180,180 Anitkabir Longitude
+  textfieldLongitude = textFieldFn("3250.22E", "textfieldLongitude_change1", 304, 100, 74, 20, G4P.SCROLLBARS_NONE);
   labelAltitude = labelFn(this, "Alt", 382, 100, 80, 20);
-  textfieldAltitude = textFieldFn("349969", "textfieldAltitude_change1", 400, 100, 50, 20, G4P.SCROLLBARS_NONE);
+  textfieldAltitude = textFieldFn("2400", "textfieldAltitude_change1", 400, 100, 50, 20, G4P.SCROLLBARS_NONE);
   
   labelMesaj = labelFn(this, "Mesaj", 20, 130, 80, 20);
   textfieldMesaj = textFieldFn("QRV 145.500 Ceptel: 0 5XX XXX XX XX", "textfieldMesaj_change1", 76, 130, 374, 20, G4P.SCROLLBARS_NONE);
   
+/*
   labelGonder = labelFn(this, "Gonder", 20, 160, 80, 20);
   checkboxLokasyon = checkboxFn("Lokasyon", "checkboxLokasyon_clicked1", true, 76, 160, 150, 20);
   checkboxYukseklik = checkboxFn("Yukseklik", "checkboxYukseklik_clicked1", false, 76, 180, 150, 20);
   checkboxBatarya = checkboxFn("Batarya Durumu", "checkboxBatarya_clicked1", false, 76, 200, 150, 20);
-  
+*/  
   labelAkilliBeacon = labelFn(this, "Akilli Beacon (Dakika)", 10, 220, 180, 20);
-  sliderZamanlama = sliderFn(1, 1, 60, 10, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
+  sliderZamanlama = sliderFn(1, 1, 60, 60, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
   
+/*
   labelPreambleSuresi = labelFn(this, "Preamble Suresi (milisaniye)", 10, 300, 180, 20);
   sliderPreamble = sliderFn(350, 100, 1000, 20, "sliderPreamble_change1", 10, 320, 440, 50, 10.0);
   
   labelKuyrukSuresi = labelFn(this, "Kuyruk Suresi (milisaniye)", 10, 380, 190, 20);
   sliderTXDelay = sliderFn(100, 50, 500, 9, "sliderTXDelay_change1", 10, 400, 440, 50, 10.0);
-  
+*/  
   buttonReceive = buttonFn("Bilgileri Cihazdan Al", "buttonReceive_click1", 10, 460, 210, 30);
   buttonSend = buttonFn("Bilgileri Cihaza Yukle", "buttonSend_click1", 229, 460, 220, 30);
   
