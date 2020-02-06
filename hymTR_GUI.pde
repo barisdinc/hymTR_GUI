@@ -122,8 +122,8 @@ public void imgButton2_click1(GImageButton source, GEvent event) { //_CODE_:imgB
 public void radioButtonGPSVar_clicked1(GOption source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
   radioButtonGPSVar.setSelected(true);
   radioButtonGPSYok.setSelected(false);
-  labelGPSPortHizi.setVisible(true);
-  dropListGPSHizi.setVisible(true);
+//  labelGPSPortHizi.setVisible(true);
+//  dropListGPSHizi.setVisible(true);
   labelLatitude.setVisible(false);
   textfieldLatitude.setVisible(false);
   labelLongitude.setVisible(false);
@@ -136,8 +136,8 @@ public void radioButtonGPSVar_clicked1(GOption source, GEvent event) { //_CODE_:
 public void radioButtonGPSYok_clicked1(GOption source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
   radioButtonGPSVar.setSelected(false);
   radioButtonGPSYok.setSelected(true);
-  labelGPSPortHizi.setVisible(false);
-  dropListGPSHizi.setVisible(false);
+//  labelGPSPortHizi.setVisible(false);
+//  dropListGPSHizi.setVisible(false);
   labelLatitude.setVisible(true);
   textfieldLatitude.setVisible(true);
   labelLongitude.setVisible(true);
@@ -208,10 +208,11 @@ public void buttonSend_click1(GButton source, GEvent event) { //_CODE_:buttonSen
    myPort.write(0x09);
    myPort.write(sliderZamanlama.getValueS());                       //Beacon Suresi
    myPort.write(0x09);
-   if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
-   if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
-   if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
-   if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 0) myPort.write("4800");    //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 1) myPort.write("9600");    //GPS Hizi
+   myPort.write("9600");    //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 2) myPort.write("57600");   //GPS Hizi
+   //if (dropListGPSHizi.getSelectedIndex() == 3) myPort.write("115200");  //GPS Hizi
    myPort.write(0x09);
    myPort.write(textfieldMesaj.getText());                               //Mesaj
    myPort.write(0x09);
@@ -259,9 +260,9 @@ public void dropListSembol_click1(GDropList source, GEvent event) { //_CODE_:dro
 //  println("dropListSembol - GDropList >> GEvent." + event + " @ " + millis());
 } //_CODE_:dropListSembol:606061:
 
-public void dropListGPSHizi_click1(GDropList source, GEvent event) { //_CODE_:dropListGPSHizi:549444:
+//public void dropListGPSHizi_click1(GDropList source, GEvent event) { //_CODE_:dropListGPSHizi:549444:
 //  println("dropListGPSHizi - GDropList >> GEvent." + event + " @ " + millis());
-} //_CODE_:dropListGPSHizi:549444:
+//} //_CODE_:dropListGPSHizi:549444:
 
 public void textfieldMesaj_change1(GTextField source, GEvent event) { //_CODE_:textfieldMesaj:236196:
 //  println("textfieldMesaj - GTextField >> GEvent." + event + " @ " + millis());
@@ -329,8 +330,8 @@ public void createMainGUI(){
   labelGPS = labelFn(this, "GPS", 20, 100, 80, 20);
   radioButtonGPSVar = radioButtonFn("Var", "radioButtonGPSVar_clicked1", true, 76, 100, 50, 20); 
   radioButtonGPSYok = radioButtonFn("Yok", "radioButtonGPSYok_clicked1", false, 134, 100, 50, 20);
-  labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 207, 100, 80, 20);
-  dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 290, 100, 160, 92, 4, 10);
+  //labelGPSPortHizi = labelFn(this, "GPS Port Hizi", 207, 100, 80, 20);
+  //dropListGPSHizi = dropListFn(gpsHizlari, "dropListGPSHizi_click1", 290, 100, 160, 92, 4, 10);
   labelLatitude = labelFn(this, "Lat", 190, 100, 80, 20);// -9012.12,N Anitkabir Latitude
   textfieldLatitude = textFieldFn("3955.50N", "textfieldLatitude_change1", 210, 100, 66, 20, G4P.SCROLLBARS_NONE);
   labelLongitude = labelFn(this, "Lon", 280, 100, 80, 20);// -180,180 Anitkabir Longitude
@@ -362,8 +363,8 @@ public void createMainGUI(){
   
   gpsOptionGroup.addControl(radioButtonGPSVar);
   gpsOptionGroup.addControl(radioButtonGPSYok);
-  labelGPSPortHizi.setVisible(true);
-  dropListGPSHizi.setVisible(true);
+  //labelGPSPortHizi.setVisible(true);
+  //dropListGPSHizi.setVisible(true);
   labelLatitude.setVisible(false);
   textfieldLatitude.setVisible(false);
   labelLongitude.setVisible(false);
@@ -476,7 +477,7 @@ GLabel labelCagriAdi;
 GLabel labelSSID; 
 GLabel labelSembol;
 GLabel labelGPS;
-GLabel labelGPSPortHizi; 
+//GLabel labelGPSPortHizi; 
 GLabel labelLatitude;
 GLabel labelLongitude;
 GLabel labelAltitude;
@@ -498,7 +499,7 @@ GCheckbox checkboxBatarya;
 GDropList dropListSeriPort; 
 GDropList dropListSSID; 
 GDropList dropListSembol; 
-GDropList dropListGPSHizi; 
+//GDropList dropListGPSHizi; 
 GSlider sliderZamanlama; 
 GSlider sliderPreamble; 
 GSlider sliderTXDelay; 
