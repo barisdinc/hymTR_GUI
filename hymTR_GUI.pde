@@ -362,10 +362,10 @@ public void createMainGUI(){
 */  
   labelAkilliBeacon = labelFn(this, "Akilli Beacon (Dakika)", 10, 220, 180, 20);
   sliderZamanlama = sliderFn(1, 1, 10, 10, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
-  labelAkilliBeaconAciklama1 = labelFn(this, "0  - 10  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 5 +" saniyede bir,", 10, 290, 320, 20);
-  labelAkilliBeaconAciklama2 = labelFn(this, "10 - 50  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 3 +" saniyede bir,", 10, 310, 320, 20);
-  labelAkilliBeaconAciklama3 = labelFn(this, "50 - 100 Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 2 +" saniyede bir,", 10, 330, 320, 20);
-  labelAkilliBeaconAciklama4 = labelFn(this, "100 Km/s ve ustunde "+ sliderZamanlama.getValueI() * 20 * 1 +" saniyede bir beacon yayinlanir.", 10, 350, 320, 20);
+  labelAkilliBeaconAciklama1 = labelFn(this, "0  - 10  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 5 +" saniyede bir,", 10, 290, 380, 20);
+  labelAkilliBeaconAciklama2 = labelFn(this, "10 - 50  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 3 +" saniyede bir,", 10, 310, 380, 20);
+  labelAkilliBeaconAciklama3 = labelFn(this, "50 - 100 Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 2 +" saniyede bir,", 10, 330, 380, 20);
+  labelAkilliBeaconAciklama4 = labelFn(this, "100 Km/s ve ustunde "+ sliderZamanlama.getValueI() * 20 * 1 +" saniyede bir beacon yayinlanir.", 10, 350, 380, 20);
 
 /*
   labelPreambleSuresi = labelFn(this, "Preamble Suresi (milisaniye)", 10, 300, 180, 20);
