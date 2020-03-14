@@ -307,7 +307,7 @@ public void splashGUI(){
   hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 160, 125, 120, 20);
   baris = labelFn(splashScreen,"Baris DINC\n  (TA7W)", 50, 150, 80, 30);
   burcu = labelFn(splashScreen, "Burcu AYBAK\n  (TA2NBA)", 170, 150, 90, 30);
-  emre = labelFn(splashScreen, "Emre KELES\n (TA6AUE)", 290, 150, 80, 30);
+  emre = labelFn(splashScreen, "Emre KELES\n (TA6AEU)", 290, 150, 80, 30);
 
   splashScreen.loop();
 }
