@@ -321,7 +321,8 @@ public void createMainGUI(){
   G4P.setGlobalColorScheme(GCScheme.GOLD_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("iZCi hymTRacker Ayar Programi (v01012020a)");
-  String[] seriPortListesi = Serial.list();
+  String[] seriPortListesi = {"Port Seciniz"};
+  seriPortListesi = concat(seriPortListesi,Serial.list());
   String[] ssidListesi = {"-0 Sabit Merkez","-7 El Telsizi ile hareketli","-9 Mobil arac"};
   String[] semboller = {"Ev","Motorsiklet","Araba"};
   String[] gpsHizlari = {"4800","9600","57600","115200"};
@@ -378,6 +379,7 @@ public void createMainGUI(){
   buttonReceive = buttonFn("Bilgileri Cihazdan Al", "buttonReceive_click1", 10, 460, 210, 30);
   buttonSend = buttonFn("Bilgileri Cihaza Yukle", "buttonSend_click1", 229, 460, 220, 30);
   
+  dropListSeriPort.setSelected(0);
   gpsOptionGroup.addControl(radioButtonGPSVar);
   gpsOptionGroup.addControl(radioButtonGPSYok);
   //labelGPSPortHizi.setVisible(true);
