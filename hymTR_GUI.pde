@@ -158,7 +158,11 @@ public void checkboxYukseklik_clicked1(GCheckbox source, GEvent event) { //_CODE
 } //_CODE_:checkboxYukseklik:919125:
 
 public void sliderZamanlama_change1(GSlider source, GEvent event) { //_CODE_:sliderZamanlama:300012:
-//  println("sliderZamanlama - GSlider >> GEvent." + event + " @ " + millis());
+//println("Seciminiz " + sliderZamanlama.getValueS());
+labelAkilliBeaconAciklama1.setText("0  - 10  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 5 +" saniyede bir.");
+labelAkilliBeaconAciklama2.setText("10 - 50  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 3 +" saniyede bir.");
+labelAkilliBeaconAciklama3.setText("50 - 100 Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 2 +" saniyede bir.");
+labelAkilliBeaconAciklama4.setText("100 Km/s ve ustunde "+ sliderZamanlama.getValueI() * 20 * 1 +" saniyede bir beacon yayinlanir.");
 } //_CODE_:sliderZamanlama:300012:
 
 public void checkboxBatarya_clicked1(GCheckbox source, GEvent event) { //_CODE_:checkboxBatarya:493573:
@@ -316,7 +320,7 @@ public void createMainGUI(){
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.GOLD_SCHEME);
   G4P.setMouseOverEnabled(false);
-  surface.setTitle("iZCi hymTR Ayar Programi (v01012020a)");
+  surface.setTitle("iZCi hymTRacker Ayar Programi (v01012020a)");
   String[] seriPortListesi = Serial.list();
   String[] ssidListesi = {"-0 Sabit Merkez","-7 El Telsizi ile hareketli","-9 Mobil arac"};
   String[] semboller = {"Ev","Motorsiklet","Araba"};
@@ -356,8 +360,12 @@ public void createMainGUI(){
   checkboxBatarya = checkboxFn("Batarya Durumu", "checkboxBatarya_clicked1", false, 76, 200, 150, 20);
 */  
   labelAkilliBeacon = labelFn(this, "Akilli Beacon (Dakika)", 10, 220, 180, 20);
-  sliderZamanlama = sliderFn(1, 1, 60, 60, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
-  
+  sliderZamanlama = sliderFn(1, 1, 10, 10, "sliderZamanlama_change1", 10, 240, 440, 47, 10.0);
+  labelAkilliBeaconAciklama1 = labelFn(this, "0  - 10  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 5 +" saniyede bir,", 10, 290, 320, 20);
+  labelAkilliBeaconAciklama2 = labelFn(this, "10 - 50  Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 3 +" saniyede bir,", 10, 310, 320, 20);
+  labelAkilliBeaconAciklama3 = labelFn(this, "50 - 100 Km/s hiz araliginda "+ sliderZamanlama.getValueI() * 20 * 2 +" saniyede bir,", 10, 330, 320, 20);
+  labelAkilliBeaconAciklama4 = labelFn(this, "100 Km/s ve ustunde "+ sliderZamanlama.getValueI() * 20 * 1 +" saniyede bir beacon yayinlanir.", 10, 350, 320, 20);
+
 /*
   labelPreambleSuresi = labelFn(this, "Preamble Suresi (milisaniye)", 10, 300, 180, 20);
   sliderPreamble = sliderFn(350, 100, 1000, 20, "sliderPreamble_change1", 10, 320, 440, 50, 10.0);
@@ -494,6 +502,10 @@ GLabel labelAltitude;
 GLabel labelMesaj; 
 GLabel labelGonder; 
 GLabel labelAkilliBeacon; 
+GLabel labelAkilliBeaconAciklama1;
+GLabel labelAkilliBeaconAciklama2;
+GLabel labelAkilliBeaconAciklama3;
+GLabel labelAkilliBeaconAciklama4;
 GLabel labelPreambleSuresi; 
 GLabel labelKuyrukSuresi;
 GLabel labelStatusMesaj;
