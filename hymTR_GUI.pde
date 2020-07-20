@@ -56,7 +56,7 @@ public void draw(){
   if (yeniVeri) 
   {
      //TODO: Ekrani doldur
-  //{'V':'01012020a','CagriIsareti':'TAMSAT','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'TAMSAT iZCi hymTR APRS Tracker','GPSHizi':9600}
+  //{'V':'01012020a','CagriIsareti':'iZCi','CagriIsaretiSSID':9,'Destination':'APRS  ','DestinationSSID':0,'Path1':'WIDE1 ','Path1SSID':1,'Path2':'WIDE2 ','Path2SSID':1,'Sembol':'','SembolTabi':'A','BeaconTipi':3,'BeaconSuresi':255,'Mesaj':'iZCi hymTR APRS Tracker','GPSHizi':9600}
     JSONObject json = parseJSONObject(SeriJSON);
     if (json == null) {
       println("Veri Cozumlenemedi");
@@ -105,21 +105,21 @@ public void buttonBaglanClick(GButton source, GEvent event) { //_CODE_:buttonBag
 //  println("buttonBaglan - GButton >> GEvent." + event + " @ " + millis());
 } //_CODE_:buttonBaglan:635785:
 
-public void imgButton3_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonTamsat:765992:
+public void imgButton3_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonAPRS:765992:
 //  println("imgButton3 - GImageButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:imgButtonTamsat:765992:
+} //_CODE_:imgButtonAPRS:765992:
 
 synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:splashScreen:721218:
   appc.background(230);
 } //_CODE_:splashScreen:721218:
 
-public void imgButton1_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonTamsatLogo:646942:
+public void imgButton1_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonAPRSLogo:646942:
 //  println("imgButton1 - GImageButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:imgButtonTamsatLogo:646942:
+} //_CODE_:imgButtonAPRSLogo:646942:
 
-public void imgButton2_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonTamsatInfo:450767:
+public void imgButton2_click1(GImageButton source, GEvent event) { //_CODE_:imgButtonAPRSInfo:450767:
 //  println("imgButton2 - GImageButton >> GEvent." + event + " @ " + millis());
-} //_CODE_:imgButtonTamsatInfo:450767:
+} //_CODE_:imgButtonAPRSInfo:450767:
 
 public void radioButtonGPSVar_clicked1(GOption source, GEvent event) { //_CODE_:checkboxLokasyon:939952:
   radioButtonGPSVar.setSelected(true);
@@ -302,10 +302,10 @@ public void splashGUI(){
   splashScreen.noLoop();
   splashScreen.setActionOnClose(G4P.CLOSE_WINDOW);
   splashScreen.addDrawHandler(this, "win_draw1");
-  imgButtonTamsatLogo = new GImageButton(splashScreen, 15, 15, 70, 70, new String[] { "TAMSATLOGOBUYUK.png", "TAMSATLOGOBUYUK.png", "TAMSATLOGOBUYUK.png" } );
-  imgButtonTamsatLogo.addEventHandler(this, "imgButton1_click1");
-  imgButtonTamsatInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png", "tamsatbuyuklogoen.png" } );
-  imgButtonTamsatInfo.addEventHandler(this, "imgButton2_click1");
+  imgButtonAPRSLogo = new GImageButton(splashScreen, 15, 15, 70, 70, new String[] { "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg" } );
+  imgButtonAPRSLogo.addEventHandler(this, "imgButton1_click1");
+  imgButtonAPRSInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg" } );
+  imgButtonAPRSInfo.addEventHandler(this, "imgButton2_click1");
   labelProgramAdi = labelFn(splashScreen, "iZCi hymTR APRS Tracker", 80, 85, 270, 30);
   labelProgramAdi.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 160, 125, 120, 20);
@@ -482,8 +482,8 @@ public GButton buttonFn(String definition, String controlFn, float leftMargin, f
 // Variable declarations 
 // splashScreen variables
 GWindow splashScreen;
-GImageButton imgButtonTamsatLogo; 
-GImageButton imgButtonTamsatInfo; 
+GImageButton imgButtonAPRSLogo; 
+GImageButton imgButtonAPRSInfo; 
 GLabel labelProgramAdi; 
 GLabel baris; 
 GLabel burcu; 
