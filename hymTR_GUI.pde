@@ -302,10 +302,10 @@ public void splashGUI(){
   splashScreen.noLoop();
   splashScreen.setActionOnClose(G4P.CLOSE_WINDOW);
   splashScreen.addDrawHandler(this, "win_draw1");
-  imgButtonAPRSLogo = new GImageButton(splashScreen, 15, 15, 70, 70, new String[] { "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg" } );
+  imgButtonAPRSLogo = new GImageButton(splashScreen, 190, 15, 70, 70, new String[] { "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg" } );
   imgButtonAPRSLogo.addEventHandler(this, "imgButton1_click1");
-  imgButtonAPRSInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg" } );
-  imgButtonAPRSInfo.addEventHandler(this, "imgButton2_click1");
+  //imgButtonAPRSInfo = new GImageButton(splashScreen, 80, 12, 340, 80, new String[] { "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg", "APRS_Turkiye.jpeg" } );
+  //imgButtonAPRSInfo.addEventHandler(this, "imgButton2_click1");
   labelProgramAdi = labelFn(splashScreen, "iZCi hymTR APRS Tracker", 80, 85, 270, 30);
   labelProgramAdi.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   hazirlayanlar = labelFn(splashScreen, "HAZIRLAYANLAR", 160, 125, 120, 20);
